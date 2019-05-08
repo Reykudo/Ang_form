@@ -1,0 +1,84 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="form">
+  <div class="header">
+    <p>Напишите нам</p>
+  </div>
+  <div class="header second"></div>
+
+  <form [formGroup]="myForm" (submit)="onSubmit()" autocomplete="off">
+    <div class="field">
+      <label for="name">Ваше имя:</label>
+      <input type="text" id="name" formControlName="name" class="entry-field" />
+      <div class="error-field">
+        <div class="error" *ngIf="isControlInvalid('name')">
+          Имя должно состоять только из букв
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="email">Ваш Email: </label>
+      <input type="text" id="email" formControlName="email" class="entry-field" />
+      <div class="error-field">
+        <div class="error" *ngIf="isControlInvalid('email')">
+          Не корректный email
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="phone">Ваш телефон:
+      </label>
+      <input type="text" id="phone" formControlName="phone" class="entry-field"  prefix="+7 " mask="(000) 000-00-00"/>
+      <div class="error-field">
+        <div class="error" *ngIf="isControlInvalid('phone')">
+          Не корректный телефон
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="subject">Тема:</label>
+      <select formControlName="subject" class="entry-field" ngInit>
+        <option *ngFor="let subject of subjects" [ngValue]="subject" [selected]="subject == subjects[0]">
+          {{ subject.name }}
+        </option>
+      </select>
+      <div class="error-field"></div>
+    </div>
+
+    <div class="field">
+      <label for="message">
+        Ваше <br> сообщение:
+      </label>
+      <textarea rows="5" cols="20" id="message" formControlName="message" class="entry-field"></textarea>
+      <div class="error-field">
+        <div class="error" *ngIf="isControlInvalid('message')">
+          Введите сообщение
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="captcha">
+        Цифры: 
+      </label>
+      <input type="text" id="captcha" formControlName="captcha" class="entry-field"  mask="00000"/>
+      <div class="captcha-img"></div>
+      <div class="error-field">
+        <div class="error" *ngIf="isControlInvalid('captcha')">
+          Не верно
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <button type="submit" class="entry-field">Отправить письмо!</button>
+    </div>
+
+  </form>
+</div>
+
+<div>
+  {{this.data | json}}
+</div>
