@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="SRVTextToImage">
       <HintPath>lib\SRVTextToImage.dll</HintPath>
     </Reference>

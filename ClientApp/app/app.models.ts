@@ -9,19 +9,20 @@ export class Contact {
         this.phone = phone;
     }
 }
-export class Message {
-    contact: Contact;
-    subjectId: number;
-    text: string;
-
-    constructor(contact: Contact, subjectId: number, text: string) {
-        this.contact = contact;
-        this.subjectId = subjectId;
-        this.text = text;
-    }
-}
-
 export class Subject {
     id: number;
     name: string;
 }
+
+export class Message {
+    contact: Contact;
+    subject: Subject;
+    text: string;
+
+    constructor(contact: Contact, subject: Subject, text: string) {
+        this.contact = contact;
+        this.subject = subject;
+        this.text = text;
+    }
+}
+

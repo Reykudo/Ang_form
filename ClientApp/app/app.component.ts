@@ -1,9 +1,8 @@
-import {
-    Component,
-    OnInit
-} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {DataService} from "../data.services";
 import {Contact, Message, Subject} from "./app.models";
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 import {
     FormGroup,
@@ -13,8 +12,6 @@ import {
     AbstractControl,
     ValidationErrors
 } from "@angular/forms";
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 
 @Component({
     selector: "app",
@@ -31,11 +28,10 @@ export class AppComponent implements OnInit {
     title = "myapp";
     subjects: Subject[];
     myForm: FormGroup;
+    sended: boolean = false;
     data: string[];
-    contact: Contact;
 
     constructor(private fb: FormBuilder, private dataService: DataService) {}
-
 
     isControlInvalid(controlName: string): boolean {
         const control = this.myForm.controls[controlName];
@@ -44,7 +40,6 @@ export class AppComponent implements OnInit {
     }
 
     onSubmit() {
-        // this.test(this.dataService)(this.myForm.value.captcha).subscribe(data=>console.log(data));
         const controls = this.myForm.controls;
         /** Проверяем форму на валидность */
         if (this.myForm.invalid) {
@@ -54,13 +49,12 @@ export class AppComponent implements OnInit {
             return;
         } else {
             let contact = new Contact(this.myForm.value.name, this.myForm.value.email, this.myForm.value.phone);
-            let message = new Message(contact, this.myForm.value.subject.id, this.myForm.value.message);
+            let message = new Message(contact, this.myForm.value.subject, this.myForm.value.message);
 
             this.dataService.sendMessage(message).subscribe((data: string[]) => {
-                console.log("return: : ", data);
+                 this.data = data;
+                 this.sended = true;
             });
-
-
         }
     }
 
@@ -72,37 +66,6 @@ export class AppComponent implements OnInit {
             }
         ));
 
-
-    /*
-        CaptchaValidator(service: DataService): AsyncValidatorFn {
-            return (control: AbstractControl): Observable < ValidationErrors | null > => {
-
-                return service.checkCaptcha(control.value) .pipe(
-                        map((data: boolean) => {
-                            console.log("map: ", data);
-                            if (control.value != data) return {
-                                'captcha': true
-                            };
-                            else return null;
-                        })
-                        );
-            };
-        }
-    */
-    /*
-        CaptchaValidator = (service: DataService): AsyncValidatorFn => {
-            return (control: AbstractControl): Promise < ValidationErrors | null > | Observable < ValidationErrors | null > => {
-                return service.checkCaptcha(control.value).pipe(
-                    switchMap((data:boolean) => (
-                        data ? 
-                            {captcha: true} 
-                            :
-                            null
-                            )
-                    )
-                );
-            }
-        }*/
     ngOnInit() {
         this.myForm = this.fb.group({
             name: ["", [
@@ -131,11 +94,10 @@ export class AppComponent implements OnInit {
         ]
 
         });
-        //this.dataService.getData().subscribe((data: string) => this.data = [data]);
+        //инициализация тем сообщения
         this.dataService.getSubjects().subscribe((subjects: Subject[]) => {
             this.subjects = subjects;
-            console.log(subjects);
-            this.myForm.get('subject').setValue(subjects[0]);
+            this.myForm.get('subject').setValue(subjects[0]); //установка значения поумолчанию
         });
     }
 }

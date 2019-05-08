@@ -20,13 +20,6 @@ namespace Ang_form.Controllers
             _context = context;
         }
 
-        // GET: api/Messages
-        [HttpGet]
-        public IEnumerable<Message> GetMessages()
-        {
-            return _context.Messages;
-        }
-
         // POST: api/Messages
         [HttpPost]
         public async Task<IActionResult> PostMessage([FromBody] Message message)
@@ -41,16 +34,14 @@ namespace Ang_form.Controllers
             if (findContact.Count() == 0) _context.Contacts.Add(message.Contact);
             else message.Contact = findContact.FirstOrDefault();
 
+            message.Subject = _context.Subjects.Find(message.Subject.Id);
+            message.SubjectId = message.Subject.Id;
+
             message.ContactId = message.Contact.Id;
             _context.Messages.Add(message);
 
             await _context.SaveChangesAsync();
             return Ok(message);
-        }
-
-        private bool MessageExists(int id)
-        {
-            return _context.Messages.Any(e => e.Id == id);
         }
     }
 }

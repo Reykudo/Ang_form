@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataService } from "../data.services";
 import { HttpClientModule } from '@angular/common/http';
-import {NgxMaskModule} from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask'
 @NgModule({
     declarations: [AppComponent],
     imports: [
